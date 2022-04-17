@@ -38,13 +38,25 @@ export default class Demo extends Phaser.Scene
         // })
         this.add.image(0, 0, 'sky').setOrigin(0,0)
         bird = this.physics.add.sprite(config.width/10, config.height/2, 'bird')
-        bird.body.gravity.y=200;
-        console.log(bird)
+        bird.body.velocity.x = 200
+        this.input.on('pointerdown', function() {
+            console.log('pressing mouse button!')
+        })
+        this.input.keyboard.on('spacedown', function() {
+            console.log('pressing space key!')
+        })   
+        // bird.body.gravity.y=200;
+        // console.log(bird)
     }
 
-    update()
+    update(time, delta)
     {
-        console.log('hello')
+        // console.log(bird)
+        if (bird.x >= config.width) {
+            bird.body.velocity.x = -200
+        } else if (bird.x <= 0) {
+            bird.body.velocity.x = 200
+        }
     }
 }
 
@@ -53,11 +65,13 @@ const config = {
     backgroundColor: '#125555',
     width: 800,
     height: 600,
+    debug: true,
     physics: {
         default: 'arcade',
-        // arcade: {
-        //   gravity: { y: 200 }
-        // }
+        arcade: {
+            debug: true,
+          gravity: { y: 200 }
+        }
       },
     scene: Demo
 };
