@@ -1,5 +1,6 @@
 import 'phaser';
 
+let bird = null;
 export default class Demo extends Phaser.Scene
 {
     constructor ()
@@ -14,6 +15,7 @@ export default class Demo extends Phaser.Scene
         // this.load.glsl('bundle', 'assets/plasma-bundle.glsl.js');
         // this.load.glsl('stars', 'assets/starfields.glsl.js');
         this.load.image('sky', 'assets/sky.png')
+        this.load.image('bird', 'assets/bird.png')
     }
 
     create ()
@@ -34,7 +36,15 @@ export default class Demo extends Phaser.Scene
         //     yoyo: true,
         //     repeat: -1
         // })
-        this.add.image(400, 300, 'sky')
+        this.add.image(0, 0, 'sky').setOrigin(0,0)
+        bird = this.physics.add.sprite(config.width/10, config.height/2, 'bird')
+        bird.body.gravity.y=200;
+        console.log(bird)
+    }
+
+    update()
+    {
+        console.log('hello')
     }
 }
 
@@ -45,9 +55,9 @@ const config = {
     height: 600,
     physics: {
         default: 'arcade',
-        arcade: {
-          gravity: { y: 200 }
-        }
+        // arcade: {
+        //   gravity: { y: 200 }
+        // }
       },
     scene: Demo
 };
