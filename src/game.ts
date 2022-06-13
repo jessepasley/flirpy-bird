@@ -1,12 +1,17 @@
 import 'phaser';
 
+const PIPES_TO_RENDER = 4;
+
 let bird = null;
+
 let upperPipe = null;
 let lowerPipe = null;
+let pipeHorizontalDistance = 0;
 
 let pipeVerticalDistanceRange:[number, number] = [150, 250];
-let pipeVerticalDistance = Phaser.Math.Between(...pipeVerticalDistanceRange);
-let pipeVerticalPosition = Phaser.Math.Between(20, 600 - 20 - pipeVerticalDistance)
+// let pipeVerticalDistance = Phaser.Math.Between(...pipeVerticalDistanceRange);
+// let pipeVerticalPosition = Phaser.Math.Between(20, 600 - 20 - pipeVerticalDistance)
+
 
 
 export default class Demo extends Phaser.Scene
@@ -29,8 +34,21 @@ export default class Demo extends Phaser.Scene
         this.add.image(0, 0, 'sky').setOrigin(0,0)
         bird = this.physics.add.sprite(initialBirdPosition.x, initialBirdPosition.y, 'bird')
         bird.body.gravity.y = 400;
-        upperPipe = this.physics.add.sprite(400, pipeVerticalPosition, 'pipe').setOrigin(0,1)
-        lowerPipe = this.physics.add.sprite(400, upperPipe.y + pipeVerticalDistance, 'pipe').setOrigin(0,0)
+        // upperPipe = this.physics.add.sprite(400, pipeVerticalPosition, 'pipe').setOrigin(0,1)
+        // lowerPipe = this.physics.add.sprite(400, upperPipe.y + pipeVerticalDistance, 'pipe').setOrigin(0,0)
+
+        for (let i = 0; i < PIPES_TO_RENDER; i++) {
+            pipeHorizontalDistance += 400
+            let pipeVerticalDistance = Phaser.Math.Between(...pipeVerticalDistanceRange);
+            let pipeVerticalPosition = Phaser.Math.Between(20, 600 - 20 - pipeVerticalDistance);
+
+            upperPipe = this.physics.add.sprite(pipeHorizontalDistance, pipeVerticalPosition, 'pipe').setOrigin(0,1);
+            lowerPipe = this.physics.add.sprite(upperPipe.x, upperPipe.y + pipeVerticalDistance, 'pipe').setOrigin(0,0);
+
+            upperPipe.body.velocity.x = -200;
+            lowerPipe.body.velocity.x = -200;
+        }
+
         const spaceBar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE)
         spaceBar.on('down', this.flap)
     }
